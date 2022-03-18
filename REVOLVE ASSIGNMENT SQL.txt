@@ -1,0 +1,109 @@
+-- Total number of Organizations
+select count(org_name) as Total_no_org from organisations ;
+--Result - 100
+--Query Run time - 20ms
+
+
+--How many organisations do not have offer_requests?
+select count(a) as no_of_org_not_have_rq from (select offer_requests.organisation_id 
+from offer_requests
+group by offer_requests.organisation_id
+having count(*)=0)a;
+--Result - 0
+--Query Run time - 74 ms
+
+
+-- How many organisations have offer_requests?
+select count(a) as no_of_org_offer_req from (select offer_requests.organisation_id 
+from offer_requests
+group by offer_requests.organisation_id)a;
+--Result - 100
+--Query Run time - 34 ms
+
+
+--How many organisations have no offers?
+select count(a) as no_of_org_not_have_offer from (select offers.organisation_id 
+from offers
+group by offers.organisation_id
+having count(*)=0)a;
+--Result - 0
+--Query Run time - 67 ms
+
+
+
+
+--Which organisation has maximum offers and how many offers?
+select organisations.org_name , count(offers.id) as maximum_of_offers
+from organisations, offers 
+where offers.organisation_id=organisations.id 
+group by organisations.org_name 
+order by count(offers.id)  desc
+limit 1;
+--Result - moaning_turquoise - 10,915
+--Query Run time - 527 ms
+
+
+
+
+
+--Which organisation has minimum offers and how many offers?
+select organisations.org_name , count(offers.id) as minimum_of_offers
+from organisations, offers 
+where offers.organisation_id=organisations.id 
+group by organisations.org_name 
+order by count(offers.id)  asc
+limit 1;
+--Result - native_lime - 420
+--Query Run time - 114 ms
+
+
+
+
+--Which organisation has maximum orders and how many orders?
+select organisations.org_name , count(orders.id) as maximum_of_orders
+from organisations, orders 
+where orders.organisation_id=organisations.id 
+group by organisations.org_name 
+order by count(orders.id)  desc 
+limit 1;
+--Result - dual_sapphire - 32
+--Query Run time - 49 ms
+
+
+
+
+--Which organisation has minimum orders and how many orders?
+select organisations.org_name , count(orders.id) as minimum_of_orders
+from organisations, orders 
+where orders.organisation_id=organisations.id 
+group by organisations.org_name 
+order by count(orders.id)  asc  
+limit 1;
+--Result - hollow_amber - 1
+--Query Run time - 19 ms
+
+
+
+
+--Which organisation has the maximum total amount of offers and what is the amount?
+select organisations.org_name , sum(offers.total_amount) as Total_of_offers_amount, count(offers.id) as total_offer
+from organisations, offers 
+where offers.organisation_id=organisations.id 
+group by organisations.org_name 
+order by count(offers.id)  desc  
+limit 1;
+--Result - moaning_turquoise - 324,947,704 amount , offers 10,915
+--Query Run time - 454 ms
+
+
+
+
+--Which organisation has the maximum total amount of orders and what is the amount?
+select organisations.org_name , sum(orders.total_amount), count(orders.id) 
+from organisations, orders 
+where orders.organisation_id=organisations.id 
+group by organisations.org_name 
+order by count(orders.id)  desc  
+limit 1;
+--Result - dual_sapphire - 1,123,713 amount , orders 32
+--Query Run time - 282 ms
